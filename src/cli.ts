@@ -41,6 +41,26 @@ const options = [
     help: 'Shell to use (bash, zsh, fish, ...etc)',
     default: ''
   },
+  
+  {
+    names: ['silent'],
+    type: 'bool',
+    help: 'Emit no stdout.',
+    default: false
+  },
+  {
+    names: ['debug'],
+    type: 'bool',
+    help: 'Show warnings, etc.',
+    default: false
+  },
+  {
+    names: ['any'],
+    type: 'bool',
+    help: 'If using multiple processes, will exit with 0 as long as at least one process exits with 0.',
+    default: false
+  },
+  
   {
     names: ['exec', 'e'],
     type: 'string',
@@ -53,6 +73,19 @@ const options = [
     help: 'Matches a string in the gmx.scripts object in package.json.',
     default: ''
   }
+  
+  // {
+  //   names: ['exec', 'e'],
+  //   type: 'arrayOfString',
+  //   help: 'Executable string to run.',
+  //   default: []
+  // },
+  // {
+  //   names: ['run'],
+  //   type: 'arrayOfString',
+  //   help: 'Matches a string in the gmx.scripts object in package.json.',
+  //   default: []
+  // }
 ];
 
 const parser = dashdash.createParser({options: options});
@@ -63,7 +96,7 @@ try {
   process.exit(1);
 }
 
-if(opts.version){
+if (opts.version) {
   const gmxPkgJSON = require('../package.json');
   console.log(gmxPkgJSON.version);
   process.exit(0);
@@ -79,8 +112,10 @@ if (opts.help) {
 
 const projRoot = findProjectRoot(process.cwd());
 
-if (!projRoot) {
-  throw new Error('gmx could not find project root given the current working directory: ' + process.cwd());
+const verbosity = opts.verbose.length;
+
+if (!projRoot && (verbosity > 0 || opts.debug)) {
+  log.error('could not find project root given the current working directory:', process.cwd());
 }
 
 const theirPkgJSON = require(path.resolve(projRoot + '/package.json'));
@@ -102,31 +137,30 @@ if (String(check).trim().length < 1) {
   throw chalk.bold(`gmx could not locate the shell you wish to use: "${chalk.magentaBright(shell)}".`);
 }
 
-if(opts.exec && opts.run){
+if (opts.exec && opts.run) {
   throw chalk.magenta(`gmx usage error: please use either --exec="x" or --run="x", but not both.`);
 }
 
 let runnableScript = '';
 
-if(opts.run){
-   if(gmxScripts[opts.run]){
-      runnableScript = gmxScripts[opts.run];
-   }
-   else{
-     throw chalk.magentaBright(`gmx: Your package.json file does not have a gmx script that matches "${chalk.magenta.bold(opts.run)}".`)
+if (opts.run) {
+  if (gmxScripts[opts.run]) {
+    runnableScript = gmxScripts[opts.run];
+  }
+  else {
+    throw chalk.magentaBright(`gmx: Your package.json file does not have a gmx script that matches "${chalk.magenta.bold(opts.run)}".`)
   }
 }
 
 const bin = path.resolve(projRoot + '/node_modules/.bin');
+
+const exec = runnableScript || opts.exec || opts._args.join(' ');
 
 const k = cp.spawn(shell, [], {
   env: Object.assign({}, process.env, {
     PATH: `${bin}:${process.env.PATH}`
   })
 });
-
-
-const exec = runnableScript || opts.exec || opts._args.join(' ');
 
 k.stdin.write(exec);
 k.stdout.pipe(process.stdout);

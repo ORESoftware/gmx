@@ -38,6 +38,24 @@ const options = [
         default: ''
     },
     {
+        names: ['silent'],
+        type: 'bool',
+        help: 'Emit no stdout.',
+        default: false
+    },
+    {
+        names: ['debug'],
+        type: 'bool',
+        help: 'Show warnings, etc.',
+        default: false
+    },
+    {
+        names: ['any'],
+        type: 'bool',
+        help: 'If using multiple processes, will exit with 0 as long as at least one process exits with 0.',
+        default: false
+    },
+    {
         names: ['exec', 'e'],
         type: 'string',
         help: 'Executable string to run.',
@@ -71,8 +89,9 @@ if (opts.help) {
     process.exit(0);
 }
 const projRoot = residence_1.findProjectRoot(process.cwd());
-if (!projRoot) {
-    throw new Error('gmx could not find project root given the current working directory: ' + process.cwd());
+const verbosity = opts.verbose.length;
+if (!projRoot && (verbosity > 0 || opts.debug)) {
+    log.error('could not find project root given the current working directory:', process.cwd());
 }
 const theirPkgJSON = require(path.resolve(projRoot + '/package.json'));
 const gmxScripts = theirPkgJSON.gmx && theirPkgJSON.gmx.scripts || {};
@@ -101,12 +120,12 @@ if (opts.run) {
     }
 }
 const bin = path.resolve(projRoot + '/node_modules/.bin');
+const exec = runnableScript || opts.exec || opts._args.join(' ');
 const k = cp.spawn(shell, [], {
     env: Object.assign({}, process.env, {
         PATH: `${bin}:${process.env.PATH}`
     })
 });
-const exec = runnableScript || opts.exec || opts._args.join(' ');
 k.stdin.write(exec);
 k.stdout.pipe(process.stdout);
 k.stderr.pipe(process.stderr);
