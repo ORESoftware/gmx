@@ -1,6 +1,6 @@
 {
   "name": "gmx",
-  "version": "0.0.101",
+  "version": "0.0.102",
   "description": "Semver-oriented TypeScript library skeleton.",
   "bin": {
     "gmx": "dist/cli.js"
@@ -36,9 +36,9 @@
     "@types/core-js": "^0.9.46",
     "@types/node": "^9.6.2"
   },
-  "gmx":{
-    "scripts":{
-      "foo":"echo \"$gmx_zone\""
+  "gmx": {
+    "scripts": {
+      "foo": "echo \"$gmx_zone\""
     }
   }
 }
