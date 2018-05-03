@@ -2,6 +2,7 @@
 
 # GMX - running local NPM executables by default
 
+Pronounced "gimmicks". <br>
 This tool is similar to the official NPM tool "npx", but "gmx" attempts to do less, but do less better.
 
 ---------
