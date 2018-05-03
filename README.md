@@ -2,10 +2,15 @@
 
 # GMX - running local NPM executables by default
 
+This tool is similar to the official NPM tool "npx", but "gmx" attempts to do less, but do less better.
+
+---------
 If local executables exist in `./node_modules/.bin`, gmx will use those first.
 For example, if you have a local and global version of nodemon, `gmx -- nodemon`, will use the local version
 if you are within the project, otherwise if your cwd is outside the project, will use the global version of nodemon.
 Just depends on your cwd.
+
+---------
 
 ## Installation:
 
