@@ -9,8 +9,8 @@ if (process.argv.length < 3) {
     throw chalk_1.default.magentaBright('Please pass arguments to gmx... Example: "gmx tsc".');
 }
 const log = {
-    info: console.log.bind(console, chalk_1.default.gray.bold('gmx')),
-    error: console.error.bind(console, chalk_1.default.magentaBright.underline('gmx'))
+    info: console.log.bind(console, chalk_1.default.gray.bold('GMX')),
+    error: console.error.bind(console, chalk_1.default.magentaBright.underline('GMX'))
 };
 const dashdash = require('dashdash');
 const options = [
@@ -57,15 +57,15 @@ const options = [
     },
     {
         names: ['exec', 'e'],
-        type: 'string',
+        type: 'arrayOfString',
         help: 'Executable string to run.',
-        default: ''
+        default: []
     },
     {
         names: ['run'],
-        type: 'string',
+        type: 'arrayOfString',
         help: 'Matches a string in the gmx.scripts object in package.json.',
-        default: ''
+        default: []
     }
 ];
 const parser = dashdash.createParser({ options: options });
@@ -107,26 +107,51 @@ catch (err) {
 if (String(check).trim().length < 1) {
     throw chalk_1.default.bold(`gmx could not locate the shell you wish to use: "${chalk_1.default.magentaBright(shell)}".`);
 }
-if (opts.exec && opts.run) {
-    throw chalk_1.default.magenta(`gmx usage error: please use either --exec="x" or --run="x", but not both.`);
-}
-let runnableScript = '';
-if (opts.run) {
-    if (gmxScripts[opts.run]) {
-        runnableScript = gmxScripts[opts.run];
+let runnableScripts = opts.exec;
+opts.run.forEach(function () {
+    const r = gmxScripts[opts.run];
+    if (r && typeof r === 'string') {
+        runnableScripts.push(gmxScripts[opts.run]);
     }
     else {
         throw chalk_1.default.magentaBright(`gmx: Your package.json file does not have a gmx script that matches "${chalk_1.default.magenta.bold(opts.run)}".`);
     }
-}
-const bin = path.resolve(projRoot + '/node_modules/.bin');
-const exec = runnableScript || opts.exec || opts._args.join(' ');
-const k = cp.spawn(shell, [], {
-    env: Object.assign({}, process.env, {
-        PATH: `${bin}:${process.env.PATH}`
-    })
 });
-k.stdin.write(exec);
-k.stdout.pipe(process.stdout);
-k.stderr.pipe(process.stderr);
-k.stdin.end('\n');
+runnableScripts.push(opts._args.join(' '));
+const bin = path.resolve(projRoot + '/node_modules/.bin');
+Promise.all(runnableScripts.map(function (s) {
+    return new Promise(function (resolve) {
+        const k = cp.spawn(shell, [], {
+            env: Object.assign({}, process.env, {
+                PATH: `${bin}:${process.env.PATH}`
+            })
+        });
+        k.stdin.write(s);
+        if (!opts.silent) {
+            k.stdout.pipe(process.stdout);
+        }
+        k.stderr.pipe(process.stderr);
+        k.once('exit', resolve);
+        k.stdin.end('\n');
+    });
+}))
+    .then(function (results) {
+    let successCount = 0;
+    let failCount = 0;
+    for (let i = 0; i < results.length; i++) {
+        const c = results[i];
+        if (c === 0) {
+            successCount++;
+        }
+        else {
+            failCount++;
+        }
+    }
+    if (opts.any && successCount > 0) {
+        return process.exit(0);
+    }
+    if (failCount < 1) {
+        return process.exit(0);
+    }
+    process.exit(1);
+});
