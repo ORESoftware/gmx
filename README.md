@@ -11,13 +11,13 @@ npm install -g gmx
 ## Usage
 
 ```bash
-gmx --shell=bash -- echo "foobar"
+ $ gmx --shell=bash -- echo "foobar"
 ```
 
 the default shell is bash, so you can just do this:
 
 ```bash
-gmx -- echo "foobar"
+ $ gmx -- echo "foobar"
 ```
 
 ### Something more realistc
@@ -25,19 +25,19 @@ gmx -- echo "foobar"
 You may want to run a local version of typescript/tsc, so you would do:
 
 ```bash
-gmx -- tsc -w
+ $ gmx -- tsc -w
 ```
 
 ### To define an executable string, use:
 
 ```bash
-gmx --exec="tsc -w"
+ $ gmx --exec="tsc -w"
 ```
 
 or for short:
 
 ```bash
-gmx -e="tsc -w"
+ $ gmx -e="tsc -w"
 ```
 
 ## Running jobs in parallel
@@ -47,14 +47,14 @@ but if you want to run commands in parallel, use gmx:
 
 
 ```bash
- gmx -e 'echo "foo"' -e 'exit 3' -e 'echo "baz"'
+ $ gmx -e 'echo "foo"' -e 'exit 3' -e 'echo "baz"'
 ```
 
 the above will exit with code 1, as evidence by the output from:
 
 
 ```bash
-gmx -e 'echo "foo"' -e 'exit 3' -e 'echo "baz"'; echo $?
+ $ gmx -e 'echo "foo"' -e 'exit 3' -e 'echo "baz"'; echo $?
 ```
 
 if we run the above, we get:
@@ -64,11 +64,11 @@ if we run the above, we get:
 > 1
 
 
-to exit the `gmx` process with 0 if any subcommand exits with 0, use the --any option:
+to exit the `gmx` process with 0 if any subcommand exits with 0, use the `--any` option:
 
 
 ```bash
-gmx --any -e 'echo "foo"' -e 'exit 3' -e 'echo "baz"'; echo $?
+ $ gmx --any -e 'echo "foo"' -e 'exit 3' -e 'echo "baz"'; echo $?
 ```
 
 now we get:
