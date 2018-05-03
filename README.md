@@ -2,6 +2,11 @@
 
 # GMX - running local NPM executables by default
 
+If local executables exist in `./node_modules/.bin`, gmx will use those first.
+For example, if you have a local and global version of nodemon, `gmx -- nodemon`, will use the local version
+if you are within the project, otherwise if your cwd is outside the project, will use the global version of nodemon.
+Just depends on your cwd.
+
 ## Installation:
 
 ```bash
@@ -10,34 +15,43 @@ npm install -g gmx
 
 ## Usage
 
-```bash
- $ gmx --shell=bash -- echo "foobar"
-```
-
-the default shell is bash, so you can just do this:
+Run any command after the '--' like so:
 
 ```bash
- $ gmx -- echo "foobar"
+ $ gmx -- echo 'foobar'
 ```
 
-### Something more realistc
+To specify a different shell than bash, use:
 
-You may want to run a local version of typescript/tsc, so you would do:
+```bash
+ $ gmx --shell=zsh -- echo 'foobar'
+```
+
+### Something more useful/realistc
+
+You may want to run a local version of typescript/tsc or nodemon, so you would do:
 
 ```bash
  $ gmx -- tsc -w
 ```
 
+or:
+
+```bash
+ $ gmx -- nodemon
+```
+
+
 ### To define an executable string, use:
 
 ```bash
- $ gmx --exec="tsc -w"
+ $ gmx --exec='tsc -w'
 ```
 
 or for short:
 
 ```bash
- $ gmx -e="tsc -w"
+ $ gmx -e 'tsc -w'
 ```
 
 ## Running jobs in parallel
