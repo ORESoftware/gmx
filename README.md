@@ -59,9 +59,9 @@ gmx -e 'echo "foo"' -e 'exit 3' -e 'echo "baz"'; echo $?
 
 if we run the above, we get:
 
->foo
->baz
->1
+> ```foo```
+> ```baz```
+> ```1```
 
 
 to exit the `gmx` process with 0 if any subcommand exits with 0, use the --any option:
@@ -73,8 +73,8 @@ gmx --any -e 'echo "foo"' -e 'exit 3' -e 'echo "baz"'; echo $?
 
 now we get:
 
->foo
->baz
->0
+> ```foo```
+> ```baz```
+> ```0```
 
 
