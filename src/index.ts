@@ -1,3 +1,5 @@
+'use strict';
+
 import path = require('path');
 import {Readable, Writable} from "stream";
 import cp = require('child_process');

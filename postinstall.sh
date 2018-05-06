@@ -15,5 +15,5 @@ mkdir -p "$HOME/.gmx"
 cat gmx.sh > "$HOME/.gmx/gmx.sh"
 
 echo -e "${gmx_green}GMX was installed successfully.${gmx_no_color}";
-echo "Add the following line to your .bashrc/.bash_profile files:";
-echo "${gmx_cyan}. \$HOME/.gmx/gmx.sh${gmx_no_color}";
+echo -e "Add the following line to your .bashrc/.bash_profile files:";
+echo -e "${gmx_cyan}. \"\$HOME/.gmx/gmx.sh\"${gmx_no_color}";

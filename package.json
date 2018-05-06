@@ -36,8 +36,8 @@
   },
   "devDependencies": {
     "@types/core-js": "^0.9.46",
-    "@types/node": "^9.6.2",
-    "humpty-dumpty": "0.0.102"
+    "@types/node": "^9.6.12",
+    "humpty-dumpty": "0.0.103"
   },
   "gmx": {
     "scripts": {
