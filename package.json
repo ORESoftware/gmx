@@ -1,9 +1,10 @@
 {
   "name": "gmx",
-  "version": "0.0.102",
+  "version": "0.0.103",
   "description": "Semver-oriented TypeScript library skeleton.",
   "bin": {
-    "gmx": "dist/cli.js"
+    "gmx": "dist/cli.js",
+    "gmx_find_root": "dist/find-root.js"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -34,7 +35,8 @@
   },
   "devDependencies": {
     "@types/core-js": "^0.9.46",
-    "@types/node": "^9.6.2"
+    "@types/node": "^9.6.2",
+    "humpty-dumpty": "0.0.102"
   },
   "gmx": {
     "scripts": {
