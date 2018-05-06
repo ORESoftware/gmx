@@ -6,18 +6,14 @@ import {findProjectRoot} from "residence";
 import chalk from 'chalk';
 import path = require('path');
 
-if (process.argv.length < 3) {
-  throw chalk.magentaBright('Please pass arguments to gmx... Example: "gmx tsc".');
-}
-
-// if (process.argv.indexOf('--') < 2) {
-//   throw chalk.blueBright(`GMX: Please use "${chalk.magentaBright('--')}" to signify the beginning of your command, ` +
-//     `for example: ${chalk.magenta('gmx -- echo "foobar"')}.`);
+// if (process.argv.length < 3) {
+//   throw chalk.magentaBright('Please pass arguments to gmx... Example: "gmx tsc".');
 // }
 
 const log = {
-  info: console.log.bind(console, chalk.gray.bold('GMX')),
-  error: console.error.bind(console, chalk.magentaBright.underline('GMX'))
+  info: console.log.bind(console, chalk.gray.bold('GMX:')),
+  error: console.error.bind(console, chalk.magentaBright.underline('GMX error:')),
+  warn: console.error.bind(console, chalk.yellow.bold('GMX warning:'))
 };
 
 const dashdash = require('dashdash');
@@ -46,7 +42,12 @@ const options = [
     help: 'Shell to use (bash, zsh, fish, ...etc)',
     default: ''
   },
-  
+  {
+    names: ['stdin'],
+    type: 'bool',
+    help: 'Read command from stdin.',
+    default: false
+  },
   {
     names: ['silent'],
     type: 'bool',
@@ -65,19 +66,6 @@ const options = [
     help: 'If using multiple processes, will exit with 0 as long as at least one process exits with 0.',
     default: false
   },
-  
-  // {
-  //   names: ['exec', 'e'],
-  //   type: 'string',
-  //   help: 'Executable string to run.',
-  //   default: ''
-  // },
-  // {
-  //   names: ['run'],
-  //   type: 'string',
-  //   help: 'Matches a string in the gmx.scripts object in package.json.',
-  //   default: ''
-  // },
   
   {
     names: ['exec', 'e'],
@@ -99,7 +87,7 @@ let opts: any;
 try {
   opts = parser.parse(process.argv);
 } catch (e) {
-  log.error('error: %s', e.message);
+  log.error(e.message);
   process.exit(1);
 }
 
@@ -153,76 +141,121 @@ if (String(check).trim().length < 1) {
   throw chalk.bold(`gmx could not locate the shell you wish to use: "${chalk.magentaBright(shell)}".`);
 }
 
-let runnableScripts: Array<string> = opts.exec;
-
-opts.run.forEach(function () {
-  const r = gmxScripts[opts.run];
-  if (r && typeof r === 'string') {
-    runnableScripts.push(gmxScripts[opts.run]);
-  }
-  else {
-    throw chalk.magentaBright(`gmx: Your package.json file does not have a gmx script that matches "${chalk.magenta.bold(opts.run)}".`)
-  }
-});
-
-runnableScripts.push(opts._args.join(' '));
-const bin = path.resolve(projRoot + '/node_modules/.bin');
-
-const getPath = function () {
-  const p = (projRoot && bin) ? `${bin}:${process.env.PATH}` : process.env.PATH;
-  if (opts.debug) {
-    log.info('Added the following to the PATH:', bin);
-  }
-  return p;
-};
-
-Promise.all(runnableScripts.map(function (s) {
+if (opts.stdin || process.argv.slice(2).length < 1) {
   
-  return new Promise(function (resolve) {
+  if (verbosity > 0) {
+    log.info('Reading from stdin.');
+  }
+  
+  const k = cp.spawn(shell);
+  process.stdin.resume().pipe(k.stdin);
+  
+  if (!opts.silent) {
+    k.stdout.pipe(process.stdout);
+  }
+  
+  k.stderr.pipe(process.stderr);
+  
+  k.once('exit', function (code) {
     
-    const k = cp.spawn(shell, [], {
-      env: Object.assign({}, process.env, {
-        PATH: getPath()
-      })
-    });
-    
-    k.stdin.write(s);
-    if (!opts.silent) {
-      k.stdout.pipe(process.stdout);
+    if (verbosity > 0) {
+      log.info('exitting with code:', code);
     }
     
-    k.stderr.pipe(process.stderr);
-    k.once('exit', resolve);
-    k.stdin.end('\n');
+    if (code > 0) {
+      return process.exit(1);
+    }
+    
+    process.exit(0);
+  });
+  
+}
+
+else {
+  
+  let runnableScripts: Array<string> = opts.exec;
+  
+  opts.run.forEach(function () {
+    const r = gmxScripts[opts.run];
+    if (r && typeof r === 'string') {
+      runnableScripts.push(gmxScripts[opts.run]);
+    }
+    else {
+      throw chalk.magentaBright(`gmx: Your package.json file does not have a gmx script that matches "${chalk.magenta.bold(opts.run)}".`)
+    }
+  });
+  
+  runnableScripts.push(opts._args.join(' '));
+  const bin = path.resolve(projRoot + '/node_modules/.bin');
+  
+  const getPath = function () {
+    const p = (projRoot && bin) ? `${bin}:${process.env.PATH}` : process.env.PATH;
+    if (opts.debug) {
+      log.info('Added the following to the PATH:', bin);
+    }
+    return p;
+  };
+  
+  const s = runnableScripts.reduce(function (a, b) {
+    return a + String(b);
+  }, ' ');
+  
+  if (s === String(s).trim()) { // all we have is whitespace
+    log.warn('no (sub)command passed at command line.');
+    process.exit(0);
+  }
+  
+  Promise.all(runnableScripts.map(function (s) {
+    
+    return new Promise(function (resolve) {
+      
+      const k = cp.spawn(shell, [], {
+        env: Object.assign({}, process.env, {
+          PATH: getPath()
+        })
+      });
+      
+      k.stdin.write(s);
+      
+      if (!opts.silent) {
+        k.stdout.pipe(process.stdout);
+      }
+      
+      k.stderr.pipe(process.stderr);
+      k.once('exit', resolve);
+      k.stdin.end('\n');
+      
+    });
+    
+  }))
+  .then(function (results: Array<number>) {
+    
+    let successCount = 0;
+    let failCount = 0;
+    
+    for (let i = 0; i < results.length; i++) {
+      const c = results[i];
+      if (c === 0) {
+        successCount++;
+      }
+      else {
+        failCount++;
+      }
+    }
+    
+    if (opts.any && successCount > 0) {
+      return process.exit(0);
+    }
+    
+    if (failCount < 1) {
+      return process.exit(0);
+    }
+    
+    process.exit(1);
     
   });
   
-}))
-.then(function (results: Array<number>) {
-  
-  let successCount = 0;
-  let failCount = 0;
-  
-  for (let i = 0; i < results.length; i++) {
-    const c = results[i];
-    if (c === 0) {
-      successCount++;
-    }
-    else {
-      failCount++;
-    }
-  }
-  
-  if (opts.any && successCount > 0) {
-    return process.exit(0);
-  }
-  
-  if (failCount < 1) {
-    return process.exit(0);
-  }
-  
-  process.exit(1);
-  
-});
+}
+
 
 
