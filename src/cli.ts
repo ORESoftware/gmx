@@ -94,8 +94,10 @@ const options = [
 ];
 
 const parser = dashdash.createParser({options: options});
+
+let opts: any;
 try {
-  var opts = parser.parse(process.argv);
+  opts = parser.parse(process.argv);
 } catch (e) {
   log.error('error: %s', e.message);
   process.exit(1);
@@ -122,10 +124,22 @@ if (!projRoot && (verbosity > 0 || opts.debug)) {
   log.error('could not find project root given the current working directory:', process.cwd());
 }
 
-const theirPkgJSON = require(path.resolve(projRoot + '/package.json'));
-const gmxScripts = theirPkgJSON.gmx && theirPkgJSON.gmx.scripts || {};
+let theirPkgJSON;
+
+try {
+  theirPkgJSON = projRoot && require(path.resolve(projRoot + '/package.json'));
+}
+catch (err) {
+  if (verbosity > 0 || opts.debug) {
+    log.error('could not load package.json file from this directory:', process.cwd());
+    log.error(err.message);
+  }
+}
+
+const gmxScripts = (theirPkgJSON && theirPkgJSON.gmx && theirPkgJSON.gmx.scripts) || {};
 const shell = opts.shell || process.env.gmx_shell || 'bash';
-let cmd = `command -v ${shell};`, check = '';
+const cmd = `command -v ${shell};`;
+let check = '';
 
 try {
   check = cp.execSync(cmd).toString();
@@ -138,10 +152,6 @@ catch (err) {
 if (String(check).trim().length < 1) {
   throw chalk.bold(`gmx could not locate the shell you wish to use: "${chalk.magentaBright(shell)}".`);
 }
-
-// if (opts.exec.length > 0 && opts.run.length > 0)  {
-//   throw chalk.magenta(`gmx usage error: please use either --exec="x" or --run="x", but not both.`);
-// }
 
 let runnableScripts: Array<string> = opts.exec;
 
@@ -156,10 +166,15 @@ opts.run.forEach(function () {
 });
 
 runnableScripts.push(opts._args.join(' '));
-
 const bin = path.resolve(projRoot + '/node_modules/.bin');
 
-// const exec = runnableScript || opts.exec || opts._args.join(' ');
+const getPath = function () {
+  const p = (projRoot && bin) ? `${bin}:${process.env.PATH}` : process.env.PATH;
+  if (opts.debug) {
+    log.info('Added the following to the PATH:', bin);
+  }
+  return p;
+};
 
 Promise.all(runnableScripts.map(function (s) {
   
@@ -167,7 +182,7 @@ Promise.all(runnableScripts.map(function (s) {
     
     const k = cp.spawn(shell, [], {
       env: Object.assign({}, process.env, {
-        PATH: `${bin}:${process.env.PATH}`
+        PATH: getPath()
       })
     });
     
