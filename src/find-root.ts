@@ -8,11 +8,9 @@ import fs = require('fs');
 //project
 const cwd = process.cwd();
 const down = [];
-let found = false;
+let found = false, p, cd;
 
-let p, cd;
-
-function stat (p: string) {
+const stat = function (p: string) {
   try {
     return fs.statSync(p).isDirectory();
   }
@@ -23,7 +21,7 @@ function stat (p: string) {
     //explicit for your pleasure
     return false;
   }
-}
+};
 
 while (true) {
   
@@ -37,7 +35,7 @@ while (true) {
   p = path.resolve(cd + '/node_modules/.bin');
   
   if (stat(p)) {
-    // Found Suman installation path
+    // Found local node_modules/.bin folder
     found = true;
     break;
   }
