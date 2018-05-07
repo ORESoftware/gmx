@@ -13,6 +13,7 @@ gmx_no_color='\033[0m'
 rm -rf "$HOME/.gmx"
 mkdir -p "$HOME/.gmx"
 cat gmx.sh > "$HOME/.gmx/gmx.sh"
+cat dist/find-root.js > "$HOME/.gmx/find-root.js"
 
 echo -e "${gmx_green}GMX was installed successfully.${gmx_no_color}";
 echo -e "Add the following line to your .bashrc/.bash_profile files:";

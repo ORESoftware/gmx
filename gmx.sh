@@ -9,7 +9,7 @@ gmx(){
 
     else
 
-     local nm="$(gmx_find_root)"
+     local nm="$(node "$HOME/.gmx/find-root.js")"
      PATH="$nm:$PATH" "$@"
 
     fi
