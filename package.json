@@ -1,7 +1,7 @@
 {
   "name": "gmx",
-  "version": "0.0.105",
-  "description": "Semver-oriented TypeScript library skeleton.",
+  "version": "0.0.106",
+  "description": "GMX is a tool to put local NPM executables on the PATH.",
   "bin": {},
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-org/gmx.git"
+    "url": "git+https://github.com/ORESoftware/gmx.git"
   },
   "keywords": [
     "typescript",
@@ -23,9 +23,9 @@
   "author": "Olegzandr VD",
   "license": "SEE LICENSE IN LICENSE.md",
   "bugs": {
-    "url": "https://github.com/your-org/gmx/issues"
+    "url": "https://github.com/ORESoftware/gmx/issues"
   },
-  "homepage": "https://github.com/your-org/gmx#readme",
+  "homepage": "https://github.com/ORESoftware/gmx#readme",
   "dependencies": {
     "chalk": "^2.4.1",
     "dashdash": "^1.14.1",
