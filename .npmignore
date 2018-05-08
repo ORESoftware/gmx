@@ -1,10 +1,23 @@
+
+### folders
 node_modules
 scripts
 test
 .idea
 .vscode
+src
+
+### files
+.npmignore
+.gitignore
+.editorconfig
+.gitattributes
+
+
+### matching
+*.tgz
 *.log
 *.md
 *.json
 *.DS_Store
-
+*.yml
