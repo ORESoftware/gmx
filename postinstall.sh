@@ -14,6 +14,8 @@ rm -rf "$HOME/.gmx"
 mkdir -p "$HOME/.gmx"
 cat gmx.sh > "$HOME/.gmx/gmx.sh"
 cat dist/find-root.js > "$HOME/.gmx/find-root.js"
+cat run.gmx.sh > /usr/local/bin/gmx
+cat run.gmx.sh > "$(npm bin -g)/gmx"
 
 echo -e "${gmx_green}GMX was installed successfully.${gmx_no_color}";
 echo -e "Add the following line to your .bashrc/.bash_profile files:";
