@@ -1,7 +1,13 @@
+
+### folders
 .idea
 .vscode
 node_modules
+
+### matching
 *.log
 dist/*
-!dist/.gitkeep
 *.tgz
+
+### negation
+!dist/.gitkeep
