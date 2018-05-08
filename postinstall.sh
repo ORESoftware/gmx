@@ -14,8 +14,14 @@ rm -rf "$HOME/.gmx"
 mkdir -p "$HOME/.gmx"
 cat gmx.sh > "$HOME/.gmx/gmx.sh"
 cat dist/find-root.js > "$HOME/.gmx/find-root.js"
-cat run.gmx.sh > /usr/local/bin/gmx
-cat run.gmx.sh > "$(npm bin -g)/gmx"
+
+root_gmx="/usr/local/bin/gmx"
+rm -rf "$root_gmx" || echo "could not remove '$root_gmx'";
+cat run.gmx.sh > "$root_gmx"
+
+gmx_bin="$(npm bin -g)/gmx";
+rm -rf "$gmx_bin" || echo "could not remove '$gmx_bin'";
+cat run.gmx.sh > "$gmx_bin"
 
 echo -e "${gmx_green}GMX was installed successfully.${gmx_no_color}";
 echo -e "Add the following line to your .bashrc/.bash_profile files:";
