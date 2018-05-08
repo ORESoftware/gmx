@@ -2,7 +2,9 @@
   "name": "gmx",
   "version": "0.0.107",
   "description": "GMX is a tool to put local NPM executables on the PATH.",
-  "bin": {},
+  "bin": {
+    "gmx": "run.gmx.sh"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
