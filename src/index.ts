@@ -65,3 +65,8 @@ export const execp = function (str: string, opts?: GMXOptions): Promise<GMXResul
     });
   });
 };
+
+export const r2gSmokeTest = function () {
+  console.log('reasonable failure...');
+  return true;
+};

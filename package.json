@@ -8,7 +8,9 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "postinstall": "./postinstall.sh",
-    "test": "suman test"
+    "test": "suman test",
+    "r2g-copy-tests": "echo 'foo copy'",
+    "r2g-run-tests": "echo 'all done yo'"
   },
   "repository": {
     "type": "git",
