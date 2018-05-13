@@ -1,6 +1,6 @@
 {
   "name": "gmx",
-  "version": "0.0.112",
+  "version": "0.0.113",
   "description": "GMX is a tool to put local NPM executables on the PATH.",
   "bin": {
     "gmx": "run.gmx.sh"
@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/ORESoftware/gmx#readme",
   "dependencies": {
+    "@oresoftware/oresoftware.package.json": "0.0.1001",
     "chalk": "^2.4.1",
     "dashdash": "^1.14.1",
     "residence": "0.0.207"
