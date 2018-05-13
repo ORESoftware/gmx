@@ -27,7 +27,7 @@ mkdir -p "$HOME/.oresoftware/nodejs/node_modules" && {
     (
       cd "$HOME/.oresoftware/nodejs";
       npm install gmx@latest
-    ) &
+    )
 
 
 } || {
