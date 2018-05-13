@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-if [[ -d "node_modules" ]]; then
+if [[ -d "node_modules/.bin" ]]; then
 
+  echo "listing all files in cwd:";
+  ls -a;
   PATH="./node_modules/.bin:$PATH" "$@"
 
 else
