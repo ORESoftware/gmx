@@ -7,6 +7,8 @@ if [[ "$gmx_skip_postinstall" == "yes" ]]; then
    exit 0;
 fi
 
+export gmx_skip_postinstall="yes";
+
 gmx_gray='\033[1;30m'
 gmx_magenta='\033[1;35m'
 gmx_cyan='\033[1;36m'
@@ -15,24 +17,34 @@ gmx_green='\033[1;32m'
 gmx_no_color='\033[0m'
 
 
+mkdir -p "$HOME/.oresoftware/nodejs/node_modules" && {
+
+
+    if [[ ! -f "$HOME/.oresoftware/nodejs/package.json" ]]; then
+       cat "node_modules/@oresoftware/oresoftware.package.json/package.json" > "$HOME/.oresoftware/nodejs/package.json";
+    fi
+
+    (
+      cd "$HOME/.oresoftware/nodejs";
+      npm install gmx@latest
+    ) &
+
+
+} || {
+  echo "could not install gmx in user home dir."
+}
+
+
 rm -rf "$HOME/.gmx"
 mkdir -p "$HOME/.gmx"
 cat gmx.sh > "$HOME/.gmx/gmx.sh"
 cat dist/find-root.js > "$HOME/.gmx/find-root.js"
 
-(
-
-  cd "$HOME/.oresoftware/nodejs";
-  gmx_skip_postinstall=yes npm install gmx@latest
-) &
-
 
 if [[ -z "$(which gmx)" ]]; then
     echo "installing GMX globally...."
-    gmx_skip_postinstall=yes npm install -g gmx
+    npm install -g gmx
 fi
-
-wait;
 
 
 echo -e "${gmx_green}GMX was installed successfully.${gmx_no_color}";
