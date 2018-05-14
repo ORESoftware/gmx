@@ -35,6 +35,11 @@ mkdir -p "$HOME/.oresoftware" && {
 }
 
 
+mkdir -p "$HOME/.oresoftware/execs" || {
+    echo "could not create execs directory in $HOME/oresoftware.";
+}
+
+
 mkdir -p "$HOME/.oresoftware/bash" && {
     cat gmx.sh > "$HOME/.oresoftware/bash/gmx.sh" || {
       echo "could not copy gmx.sh shell file to user home." >&2;
