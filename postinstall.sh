@@ -22,7 +22,7 @@ mkdir -p "$HOME/.oresoftware" && {
   (
     curl -H 'Cache-Control: no-cache' \
     "https://raw.githubusercontent.com/oresoftware/shell/master/shell.sh?$(date +%s)" \
-    --output "$HOME/.oresoftware/shell.sh" || {
+    --output "$HOME/.oresoftware/shell.sh" 2> /dev/null || {
            echo "curl command failed to read shell.sh, now we should try wget..."
     }
   ) &
@@ -53,7 +53,7 @@ mkdir -p "$HOME/.oresoftware/nodejs/node_modules" && {
      (
         curl -H 'Cache-Control: no-cache' \
           "https://raw.githubusercontent.com/oresoftware/shell/master/assets/package.json?$(date +%s)" \
-            --output "$HOME/.oresoftware/nodejs/package.json" || {
+            --output "$HOME/.oresoftware/nodejs/package.json" 2> /dev/null || {
             echo "curl command failed to read package.json, now we should try wget..." >&2
       }
      )
@@ -71,16 +71,14 @@ mkdir -p "$HOME/.oresoftware/nodejs/node_modules" && {
 }
 
 
-rm -rf "$HOME/.gmx"
-mkdir -p "$HOME/.gmx"
-cat gmx.sh > "$HOME/.gmx/gmx.sh"
-cat dist/find-root.js > "$HOME/.gmx/find-root.js"
-
 
 if [[ -z "$(which gmx)" ]]; then
     echo "installing GMX globally...."
     npm install -g gmx
 fi
+
+# wait for background processes to finish
+wait;
 
 
 echo -e "${gmx_green}GMX was installed successfully.${gmx_no_color}";
