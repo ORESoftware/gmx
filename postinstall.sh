@@ -49,21 +49,21 @@ mkdir -p "$HOME/.oresoftware/bash" && {
 
 mkdir -p "$HOME/.oresoftware/nodejs/node_modules" && {
 
-    [ ! -f "$HOME/.oresoftware/nodejs/package.json" ]  && {
-     (
-        curl -H 'Cache-Control: no-cache' \
-          "https://raw.githubusercontent.com/oresoftware/shell/master/assets/package.json?$(date +%s)" \
-            --output "$HOME/.oresoftware/nodejs/package.json" 2> /dev/null || {
-            echo "curl command failed to read package.json, now we should try wget..." >&2
-      }
-     )
-    }
+   (
+        [ ! -f "$HOME/.oresoftware/nodejs/package.json" ]  && {
+            curl -H 'Cache-Control: no-cache' \
+              "https://raw.githubusercontent.com/oresoftware/shell/master/assets/package.json?$(date +%s)" \
+                --output "$HOME/.oresoftware/nodejs/package.json" 2> /dev/null || {
+                echo "curl command failed to read package.json, now we should try wget..." >&2
+          }
+        }
 
-    (
-      cd "$HOME/.oresoftware/nodejs" && npm install --silent gmx 2> /dev/null || {
-        echo "could not install GMX in user home..." >&2;
-      }
-    )
+        (
+          cd "$HOME/.oresoftware/nodejs" && npm install --silent gmx 2> /dev/null || {
+            echo "could not install GMX in user home..." >&2;
+          }
+        )
+  ) &
 
 } || {
 
