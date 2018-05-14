@@ -5,12 +5,12 @@ gmx(){
 
     if [[ -d "node_modules" ]]; then
 
-      PATH="./node_modules/.bin:$PATH" "$@"
+        PATH="./node_modules/.bin:$PATH" "$@"
 
     else
 
-     local nm="$(node "$HOME/.gmx/find-root.js")"
-     PATH="$nm:$PATH" "$@"
+        local nm="$(node "$HOME/.oresoftware/nodejs/node_modules/gmx/dist/find-root.js")"
+        PATH="$nm:$PATH" "$@"
 
     fi
 

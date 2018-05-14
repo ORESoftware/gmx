@@ -2,13 +2,11 @@
 
 if [[ -d "node_modules/.bin" ]]; then
 
-  echo "listing all files in cwd:";
-  ls -a;
-  PATH="./node_modules/.bin:$PATH" "$@"
+    PATH="./node_modules/.bin:$PATH" "$@"
 
 else
 
- nm="$(node "$HOME/.gmx/find-root.js")"
- PATH="$nm:$PATH" "$@"
+    nm="$(node "$HOME/.oresoftware/nodejs/node_modules/gmx/dist/find-root.js")"
+    PATH="$nm:$PATH" "$@"
 
 fi

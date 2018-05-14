@@ -17,21 +17,52 @@ gmx_green='\033[1;32m'
 gmx_no_color='\033[0m'
 
 
-mkdir -p "$HOME/.oresoftware/nodejs/node_modules" && {
+mkdir -p "$HOME/.oresoftware" && {
 
-
-    if [[ ! -f "$HOME/.oresoftware/nodejs/package.json" ]]; then
-       cat "node_modules/@oresoftware/oresoftware.package.json/package.json" > "$HOME/.oresoftware/nodejs/package.json";
-    fi
-
-    (
-      cd "$HOME/.oresoftware/nodejs";
-      npm install gmx@latest
-    )
-
+  (
+    curl -H 'Cache-Control: no-cache' \
+    "https://raw.githubusercontent.com/oresoftware/shell/master/shell.sh?$(date +%s)" \
+    --output "$HOME/.oresoftware/shell.sh" || {
+           echo "curl command failed to read shell.sh, now we should try wget..."
+    }
+  ) &
 
 } || {
-  echo "could not install gmx in user home dir."
+
+  echo "could not create '$HOME/.oresoftware'";
+  exit 1;
+
+}
+
+
+mkdir -p "$HOME/.oresoftware/bash" && {
+    cat gmx.sh > "$HOME/.oresoftware/bash/gmx.sh" || {
+      echo "could not copy gmx.sh shell file to user home." >&2;
+    }
+}
+
+
+mkdir -p "$HOME/.oresoftware/nodejs/node_modules" && {
+
+    [ ! -f "$HOME/.oresoftware/nodejs/package.json" ]  && {
+     (
+        curl -H 'Cache-Control: no-cache' \
+          "https://raw.githubusercontent.com/oresoftware/shell/master/assets/package.json?$(date +%s)" \
+            --output "$HOME/.oresoftware/nodejs/package.json" || {
+            echo "curl command failed to read package.json, now we should try wget..." >&2
+      }
+     )
+    }
+
+    (
+      cd "$HOME/.oresoftware/nodejs" && npm install --silent gmx 2> /dev/null || {
+        echo "could not install GMX in user home..." >&2;
+      }
+    )
+
+} || {
+
+   echo "could not create a 'nodejs' dir in $HOME/oresoftware directory." >&2
 }
 
 
