@@ -8,6 +8,11 @@ if [[ "$gmx_skip_postinstall" == "yes" ]]; then
 fi
 
 export gmx_skip_postinstall="yes";
+gmx_exec="r2g";
+
+if [[ "$oresoftware_local_dev" == "yes" ]]; then
+     gmx_exec="/Users/alexamil/WebstormProjects/oresoftware/gmx";
+fi
 
 gmx_gray='\033[1;30m'
 gmx_magenta='\033[1;35m'
@@ -59,7 +64,7 @@ mkdir -p "$HOME/.oresoftware/nodejs/node_modules" && {
         }
 
         (
-          cd "$HOME/.oresoftware/nodejs" && npm install --silent gmx 2> /dev/null || {
+          cd "$HOME/.oresoftware/nodejs" && npm install --silent "$gmx_exec" 2> /dev/null || {
             echo "could not install GMX in user home..." >&2;
           }
         )
@@ -71,16 +76,15 @@ mkdir -p "$HOME/.oresoftware/nodejs/node_modules" && {
 }
 
 
+# wait for background processes to finish
+wait;
 
 if [[ -z "$(which gmx)" ]]; then
     echo "installing GMX globally...."
-    npm install -g gmx
+    npm install -g "$gmx_exec"
 fi
-
-# wait for background processes to finish
-wait;
 
 
 echo -e "${gmx_green}GMX was installed successfully.${gmx_no_color}";
 echo -e "Add the following line to your .bashrc/.bash_profile files:";
-echo -e "${gmx_cyan}. \"\$HOME/.gmx/gmx.sh\"${gmx_no_color}";
+echo -e "${gmx_cyan}. \"\$HOME/.oresoftware/shell.sh\"${gmx_no_color}";
