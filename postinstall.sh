@@ -8,7 +8,7 @@ if [[ "$gmx_skip_postinstall" == "yes" ]]; then
 fi
 
 export gmx_skip_postinstall="yes";
-gmx_exec="r2g";
+gmx_exec="gmx";
 
 if [[ "$oresoftware_local_dev" == "yes" ]]; then
      gmx_exec="/Users/alexamil/WebstormProjects/oresoftware/gmx";
