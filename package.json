@@ -1,6 +1,6 @@
 {
   "name": "gmx",
-  "version": "0.0.124",
+  "version": "0.0.125",
   "description": "GMX is a tool to put local NPM executables on the PATH.",
   "bin": {
     "gmx": "run.gmx.sh"
@@ -36,7 +36,6 @@
     "residence": "0.0.207"
   },
   "devDependencies": {
-    "r2g": "latest",
     "@types/core-js": "^0.9.46",
     "@types/node": "^9.6.12",
     "humpty-dumpty": "0.0.103"
