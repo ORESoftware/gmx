@@ -11,7 +11,8 @@ export gmx_skip_postinstall="yes";
 gmx_exec="gmx";
 
 if [[ "$oresoftware_local_dev" == "yes" ]]; then
-     gmx_exec="/Users/alexamil/WebstormProjects/oresoftware/gmx";
+#     gmx_exec="/Users/alexamil/WebstormProjects/oresoftware/gmx";
+   echo "this is not the gmx you are looking for."
 fi
 
 gmx_gray='\033[1;30m'
@@ -79,7 +80,7 @@ mkdir -p "$HOME/.oresoftware/nodejs/node_modules" && {
 # wait for background processes to finish
 wait;
 
-if [[ -z "$(which gmx)" ]]; then
+if [[ false && -z "$(which gmx)" ]]; then
     echo "installing GMX globally...."
     npm install -g "$gmx_exec"
 fi
