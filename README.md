@@ -21,17 +21,10 @@ npm install -g gmx
 
 ## Usage
 
-Run any command after the '--' like so:
-
 ```bash
- $ gmx -- echo 'foobar'
+ $ gmx echo 'foobar'
 ```
 
-To specify a different shell than bash, use:
-
-```bash
- $ gmx --shell=zsh -- echo 'foobar'
-```
 
 ### Something more useful/realistc
 

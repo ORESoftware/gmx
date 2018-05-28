@@ -8,7 +8,7 @@ import fs = require('fs');
 //project
 const cwd = process.cwd();
 const down = [];
-let found = false, p, cd;
+let  p, cd, found = false;
 
 const stat = function (p: string) {
   try {

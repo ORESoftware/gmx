@@ -6,6 +6,8 @@ gmx_get_latest(){
 
 gmxx(){
 
+  # here we always use a global installation
+
    if [ -z "`command -v gmx`" ] || [ -z "`command -v gmx_find_root`" ]; then
        npm install -g "gmx" || {
          return 1;
@@ -13,6 +15,7 @@ gmxx(){
    fi
 
    command gmx "$@"
+   return $?
 }
 
 gmx(){
@@ -20,8 +23,9 @@ gmx(){
     if [[ -d "node_modules" ]]; then
 
         PATH="./node_modules/.bin:$PATH" "$@"
+        return $?;
 
-    else
+    fi
 
      if [ -z "`command -v gmx_find_root`" ]; then
           npm install -g "gmx" || {
@@ -31,9 +35,7 @@ gmx(){
 
     local nm="$(gmx_find_root)"
     PATH="$nm:$PATH" "$@"
-
-    fi
-
+    return $?
 }
 
 
