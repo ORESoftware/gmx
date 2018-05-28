@@ -3,7 +3,8 @@
   "version": "0.0.126",
   "description": "GMX is a tool to put local NPM executables on the PATH.",
   "bin": {
-    "gmx": "run.gmx.sh"
+    "gmx": "assets/gmx.sh",
+    "gmx_find_root": "dist/find-root.js"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

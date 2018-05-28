@@ -10,10 +10,6 @@ fi
 export gmx_skip_postinstall="yes";
 gmx_exec="gmx";
 
-if [[ "$oresoftware_local_dev" == "yes" ]]; then
-#     gmx_exec="/Users/alexamil/WebstormProjects/oresoftware/gmx";
-   echo "this is not the gmx you are looking for."
-fi
 
 gmx_gray='\033[1;30m'
 gmx_magenta='\033[1;35m'
@@ -23,22 +19,19 @@ gmx_green='\033[1;32m'
 gmx_no_color='\033[0m'
 
 
-mkdir -p "$HOME/.oresoftware" && {
+mkdir -p "$HOME/.oresoftware" || {
+  echo "could not create '$HOME/.oresoftware'";
+  exit 1;
+}
 
-  (
+
+(
     curl -H 'Cache-Control: no-cache' \
-    "https://raw.githubusercontent.com/oresoftware/shell/master/shell.sh?$(date +%s)" \
+    "https://raw.githubusercontent.com/oresoftware/shell/master/assets/shell.sh?$(date +%s)" \
     --output "$HOME/.oresoftware/shell.sh" 2> /dev/null || {
            echo "curl command failed to read shell.sh, now we should try wget..."
     }
-  ) &
-
-} || {
-
-  echo "could not create '$HOME/.oresoftware'";
-  exit 1;
-
-}
+) &
 
 
 mkdir -p "$HOME/.oresoftware/execs" || {
@@ -46,10 +39,14 @@ mkdir -p "$HOME/.oresoftware/execs" || {
 }
 
 
-mkdir -p "$HOME/.oresoftware/bash" && {
-    cat gmx.sh > "$HOME/.oresoftware/bash/gmx.sh" || {
+mkdir -p "$HOME/.oresoftware/bash" || {
+    echo "could not mkdir '$HOME/.oresoftware/bash'" >&2;
+    exit 1;
+}
+
+cat assets/gmx.shell.sh > "$HOME/.oresoftware/bash/gmx.sh" || {
       echo "could not copy gmx.sh shell file to user home." >&2;
-    }
+      exit 1;
 }
 
 
@@ -64,11 +61,6 @@ mkdir -p "$HOME/.oresoftware/nodejs/node_modules" && {
           }
         }
 
-        (
-          cd "$HOME/.oresoftware/nodejs" && npm install --silent "$gmx_exec" 2> /dev/null || {
-            echo "could not install GMX in user home..." >&2;
-          }
-        )
   ) &
 
 } || {
@@ -77,13 +69,7 @@ mkdir -p "$HOME/.oresoftware/nodejs/node_modules" && {
 }
 
 
-# wait for background processes to finish
 wait;
-
-if [[ false && -z "$(which gmx)" ]]; then
-    echo "installing GMX globally...."
-    npm install -g "$gmx_exec"
-fi
 
 
 echo -e "${gmx_green}GMX was installed successfully.${gmx_no_color}";

@@ -6,7 +6,7 @@ if [[ -d "node_modules/.bin" ]]; then
 
 else
 
-    nm="$(node "$HOME/.oresoftware/nodejs/node_modules/gmx/dist/find-root.js")"
+    nm="$(gmx_find_root)"
     PATH="$nm:$PATH" "$@"
 
 fi
