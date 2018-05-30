@@ -8,7 +8,7 @@ gmxx(){
 
   # here we always use a global installation
 
-   if [ -z "`command -v gmx`" ] || [ -z "`command -v gmx_find_root`" ]; then
+   if [ -z "`command -v gmx`" ]; then
        npm install -g "gmx" || {
          return 1;
       }

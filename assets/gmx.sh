@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ -d "node_modules/.bin" ]]; then
+if [[ -d "node_modules" ]]; then
 
     PATH="./node_modules/.bin:$PATH" "$@"
 
