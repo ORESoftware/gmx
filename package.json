@@ -10,7 +10,7 @@
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "postinstall": "./postinstall.sh",
+    "postinstall": "./assets/postinstall.sh",
     "test": "suman test"
   },
   "repository": {
@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/ORESoftware/gmx#readme",
   "dependencies": {
+    "@oresoftware/shell": "0.0.109",
     "chalk": "^2.4.1",
     "dashdash": "^1.14.1",
     "residence": "0.0.207"
