@@ -8,14 +8,14 @@ gmxx(){
 
   # here we always use a global installation
 
-   if [ -z "`command -v gmx`" ]; then
+   if [ -z "$(command -v gmx)" ]; then
        npm install -g "gmx" || {
          return 1;
       }
    fi
 
    command gmx "$@"
-   return $?
+
 }
 
 gmx(){
@@ -27,7 +27,7 @@ gmx(){
 
     fi
 
-     if [ -z "`command -v gmx_find_root`" ]; then
+     if [ -z "$(command -v gmx_find_root)" ]; then
           npm install -g "gmx" || {
              return 1;
           }
@@ -35,7 +35,7 @@ gmx(){
 
     local nm="$(gmx_find_root)"
     PATH="$nm:$PATH" "$@"
-    return $?
+
 }
 
 

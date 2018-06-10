@@ -67,8 +67,8 @@ mkdir -p "$HOME/.oresoftware/nodejs/node_modules" ||{
        exit 0;
     fi
 
-    cat "node_modules/@oresoftware/shell/assets/shell.sh" > "$HOME/.oresoftware/shell.sh" && {
-       echo "Successfully copied @oresoftware/shell/assets/shell.sh to $HOME/.oresoftware/shell.sh";
+    cat "node_modules/@oresoftware/shell/assets/package.json" > "$HOME/.oresoftware/nodejs/package.json" && {
+       echo "Successfully copied @oresoftware/shell/assets/package.json to $HOME/.oresoftware/nodejs/package.json";
        exit 0;
     }
 
