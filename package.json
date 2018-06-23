@@ -1,10 +1,10 @@
 {
   "name": "gmx",
-  "version": "0.0.127",
+  "version": "0.0.128",
   "description": "GMX is a tool to put local NPM executables on the PATH.",
   "bin": {
     "gmx": "assets/gmx.sh",
-    "gmx_find_root": "dist/find-root.js"
+    "gmx_find_root": "assets/find-root.js"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -30,14 +30,14 @@
   },
   "homepage": "https://github.com/ORESoftware/gmx#readme",
   "dependencies": {
-    "@oresoftware/shell": "0.0.109",
+    "@oresoftware/shell": "latest",
     "chalk": "^2.4.1",
     "dashdash": "^1.14.1",
     "residence": "0.0.207"
   },
   "devDependencies": {
-    "@types/core-js": "^0.9.46",
-    "@types/node": "^9.6.16",
+    "@types/core-js": "latest",
+    "@types/node": "latest",
     "humpty-dumpty": "0.0.103"
   },
   "b3val": 1
