@@ -50,7 +50,7 @@ mkdir -p "$HOME/.oresoftware/bash" || {
     exit 1;
 }
 
-cat assets/gmx.shell.sh > "$HOME/.oresoftware/bash/gmx.sh" || {
+cat assets/shell.sh > "$HOME/.oresoftware/bash/gmx.sh" || {
       echo "could not copy gmx.sh shell file to user home." >&2;
       exit 1;
 }

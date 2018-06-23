@@ -2,15 +2,15 @@
 'use strict';
 
 //core
-import path = require('path');
-import fs = require('fs');
+const path = require('path');
+const fs = require('fs');
 
 //project
 const cwd = process.cwd();
 const down = [];
 let  p, cd, found = false;
 
-const stat = function (p: string) {
+const stat = function (p) {
   try {
     return fs.statSync(p).isDirectory();
   }
@@ -24,24 +24,24 @@ const stat = function (p: string) {
 };
 
 while (true) {
-  
+
   cd = path.resolve(cwd + down.join(''));
-  
+
   if (String(cd) === String(path.sep)) {
     // We are down to the root => fail
     break;
   }
-  
+
   p = path.resolve(cd + '/node_modules/.bin');
-  
+
   if (stat(p)) {
     // Found local node_modules/.bin folder
     found = true;
     break;
   }
-  
+
   down.push('/../');
-  
+
 }
 
 if (found) {
