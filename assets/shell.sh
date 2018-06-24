@@ -7,9 +7,8 @@ gmx_get_latest(){
 gmxx(){
 
   # here we always use a global installation
-
-   if [[ -z $(command -v gmx) ]] || [[ -z $(which gmx) ]]; then
-       npm install --silent -g "gmx" || {
+    if ! type -f gmx &> /dev/null || ! which gmx &> /dev/null; then
+       npm i -s -g "gmx" || {
           echo -e "Could not install the 'gmx' NPM package globally." >&2;
           echo -e "Check your user permissions to install global NPM packages." >&2;
          return 1;
@@ -27,8 +26,8 @@ gmx(){
         return $?;
     fi
 
-     if [[ -z $(command -v gmx_find_root) ]] || [[ -z $(which gmx_find_root) ]]; then
-          npm install --silent -g "gmx" || {
+     if ! type -f gmx_find_root &> /dev/null || ! which gmx_find_root &> /dev/null; then
+          npm i -s -g "gmx" || {
              echo -e "Could not install the 'gmx' NPM package globally." >&2;
              echo -e "Check your user permissions to install global NPM packages." >&2;
              return 1;
@@ -37,7 +36,6 @@ gmx(){
 
     local nm="$(gmx_find_root)"
     PATH="$nm:$PATH" $@
-
 }
 
 
