@@ -6,6 +6,13 @@ gmx_get_latest(){
 
 gmxx(){
 
+    options=( );
+
+    while [ "${1:0:1}" == "-"  ]; do
+        options+=("${1}")
+        shift 1;
+    done
+
   # here we always use a global installation
     if ! type -f gmx &> /dev/null || ! which gmx &> /dev/null; then
        npm i -s -g "gmx" || {
@@ -21,18 +28,25 @@ gmxx(){
 
 gmx(){
 
+    options=( );
+
+    while [ "${1:0:1}" == "-"  ]; do
+        options+=("${1}")
+        shift 1;
+    done
+
     if [[ -d "node_modules" ]]; then
         PATH="./node_modules/.bin:$PATH" "$@"
         return $?;
     fi
 
-     if ! type -f gmx_find_root &> /dev/null || ! which gmx_find_root &> /dev/null; then
-          npm i -s -g "gmx" || {
-             echo -e "Could not install the 'gmx' NPM package globally." >&2;
-             echo -e "Check your user permissions to install global NPM packages." >&2;
-             return 1;
-          }
-     fi
+    if ! type -f gmx_find_root &> /dev/null || ! which gmx_find_root &> /dev/null; then
+      npm i -s -g "gmx" || {
+         echo -e "Could not install the 'gmx' NPM package globally." >&2;
+         echo -e "Check your user permissions to install global NPM packages." >&2;
+         return 1;
+      }
+    fi
 
     local nm="$(gmx_find_root)"
     PATH="$nm:$PATH" $@
