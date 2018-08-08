@@ -22,7 +22,7 @@ gmxx(){
       }
    fi
 
-   command gmx $@;
+   command gmx "$@";
 
 }
 
@@ -49,7 +49,7 @@ gmx(){
     fi
 
     local nm="$(gmx_find_root)"
-    PATH="$nm:$PATH" $@
+    PATH="$nm:$PATH" "$@"
 }
 
 
