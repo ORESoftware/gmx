@@ -8,7 +8,7 @@ gmxx(){
 
     options=( );
 
-    while [ "${1:0:1}" == "-"  ]; do
+    while [[ "${1:0:1}" == "-"  ]]; do
         options+=("${1}")
         shift 1;
     done
@@ -30,15 +30,23 @@ gmx(){
 
     options=( );
 
-    while [ "${1:0:1}" == "-"  ]; do
+    while [[ "${1:0:1}" == "-"  ]]; do
         options+=("${1}")
         shift 1;
     done
 
-    if [[ -d "node_modules" ]]; then
+    if [[ -f package.json ]]; then
+
+        if [[ ! -d "node_modules/.bin" ]]; then
+          echo >&2 "package.json file exists in PWD, but node_modules/.bin is not a dir.";
+          return 1;
+        fi
+
         PATH="./node_modules/.bin:$PATH" "$@"
         return $?;
+
     fi
+
 
     if ! type -f gmx_find_root &> /dev/null || ! which gmx_find_root &> /dev/null; then
       npm i -s -g "gmx" || {

@@ -63,7 +63,7 @@ mkdir -p "$HOME/.oresoftware/nodejs/node_modules" ||{
 
 (
 
-    if [ -f "$HOME/.oresoftware/nodejs/package.json" ]; then
+    if [[ -f "$HOME/.oresoftware/nodejs/package.json" ]]; then
        exit 0;
     fi
 

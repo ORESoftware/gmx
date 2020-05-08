@@ -36,5 +36,8 @@
     "@types/node": "latest",
     "humpty-dumpty": "0.0.103"
   },
+  "r2g": {
+    "test": "echo 'noop'"
+  },
   "b3val": 1
 }
